@@ -16,7 +16,10 @@
       "entryFile": "main",
       "sourceRoot": "apps/nestjs-grpc/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/nestjs-grpc/tsconfig.app.json"
+        "tsConfigPath": "apps/nestjs-grpc/tsconfig.app.json",
+        "assets": ["**/*.proto"],
+        "watchAssets": true
+
       }
     },
     "bolsa-valores": {

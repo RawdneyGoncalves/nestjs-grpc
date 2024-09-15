@@ -14,13 +14,13 @@ export class OrdersController {
   }
 
   @MessagePattern('findAllOrders')
-  findAll() {
-    return this.ordersService.findAll();
+  findAll(@Payload() account_id: string) {
+    return this.ordersService.findAll(account_id);
   }
 
   @MessagePattern('findOneOrder')
   findOne(@Payload() id: number) {
-    return this.ordersService.findOne(id);
+    return this.ordersService.findOne(id.toString());
   }
 
   @MessagePattern('updateOrder')
