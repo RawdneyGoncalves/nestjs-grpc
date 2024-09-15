@@ -19,7 +19,6 @@
         "tsConfigPath": "apps/nestjs-grpc/tsconfig.app.json",
         "assets": ["**/*.proto"],
         "watchAssets": true
-
       }
     },
     "bolsa-valores": {
@@ -28,7 +27,9 @@
       "entryFile": "main",
       "sourceRoot": "apps/bolsa-valores/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/bolsa-valores/tsconfig.app.json"
+        "tsConfigPath": "apps/bolsa-valores/tsconfig.app.json",
+        "assets": ["apps/bolsa-valores/src/orders/proto/**/*.proto"], 
+        "watchAssets": true  
       }
     }
   }
