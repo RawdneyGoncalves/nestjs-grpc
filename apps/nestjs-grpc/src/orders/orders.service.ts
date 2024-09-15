@@ -89,6 +89,3 @@ export class OrdersService implements OnModuleInit {
 
 
 // front-end do home broker  <== REST ==> back-end do home broker  <=== GRPC ===> bolsa de valores
-
-
-//grpc
