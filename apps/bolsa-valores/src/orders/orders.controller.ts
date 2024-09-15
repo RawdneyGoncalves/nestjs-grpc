@@ -1,26 +1,60 @@
-import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { Controller, UseGuards } from '@nestjs/common';
+import { GrpcMethod, MessagePattern, Payload } from '@nestjs/microservices';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { AuthGuard } from '../auth/auth.guard';
+//protobuf - deserializado de binário para um objeto javascript
+//processo contário - obj ===> protobuf
 
+@UseGuards(AuthGuard)
 @Controller()
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
-  @MessagePattern('createOrder')
-  create(@Payload() createOrderDto: CreateOrderDto) {
-    return this.ordersService.create(createOrderDto);
+  @GrpcMethod('OrderService')
+  async createOrder(@Payload() createOrderDto: CreateOrderDto) {
+    console.log(createOrderDto);
+    const order = await this.ordersService.create(createOrderDto);
+    return {
+      order: {
+        order_id: order.id.toString(),
+        account_id: order.account_id,
+        asset_id: order.asset_id,
+        quantity: order.quantity,
+        status: order.status,
+      },
+    };
   }
 
-  @MessagePattern('findAllOrders')
-  findAll(@Payload() account_id: string) {
-    return this.ordersService.findAll(account_id);
+  @GrpcMethod('OrderService')
+  async findAllOrders(@Payload() findAllOrdersDto: { account_id: string }) {
+    const orders = await this.ordersService.findAll(
+      findAllOrdersDto.account_id,
+    );
+    return {
+      orders: orders.map((order) => ({
+        order_id: order.id.toString(),
+        account_id: order.account_id,
+        asset_id: order.asset_id,
+        quantity: order.quantity,
+        status: order.status,
+      })),
+    };
   }
 
-  @MessagePattern('findOneOrder')
-  findOne(@Payload() id: number) {
-    return this.ordersService.findOne(id.toString());
+  @GrpcMethod('OrderService')
+  async findOneOrder(@Payload() findOneOrderDto: { order_id: string }) {
+    const order = await this.ordersService.findOne(findOneOrderDto.order_id);
+    return {
+      order: {
+        order_id: order.id.toString(),
+        account_id: order.account_id,
+        asset_id: order.asset_id,
+        quantity: order.quantity,
+        status: order.status,
+      },
+    };
   }
 
   @MessagePattern('updateOrder')

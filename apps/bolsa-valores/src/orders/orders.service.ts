@@ -7,15 +7,14 @@ import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class OrdersService {
-
   constructor(
     @InjectModel(Order.name)
-    private orderModel: Model<Order>
-  ) { }
+    private orderModel: Model<Order>,
+  ) {}
 
   create(createOrderDto: CreateOrderDto) {
     return this.orderModel.create({
-      ...CreateOrderDto,
+      ...createOrderDto,
       status: 'PENDING',
     });
   }
